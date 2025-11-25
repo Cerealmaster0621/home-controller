@@ -1,8 +1,5 @@
-resources/light/light_all_bright.txt
-resources/light/light_bright.txt
-resources/light/light_dark.txt
-resources/light/light_off.txt
-resources/light/light_on.txt
+resources/light/
+resources/ac/
 
 /backend/src/.env
 __pycache__/

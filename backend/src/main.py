@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
-from routers import light_router
+from routers import light_router, ac_router
 import logging
 
 # Configure logging
@@ -64,6 +64,7 @@ async def value_error_handler(request: Request, exc: ValueError):
 
 # Include routers
 app.include_router(light_router.router)
+app.include_router(ac_router.router)
 
 
 @app.get("/")
@@ -73,7 +74,8 @@ def read_root():
         "status": "running",
         "endpoints": {
             "docs": "/docs",
-            "light_control": "/light"
+            "light_control": "/light",
+            "ac_control": "/ac"
         }
     }
 

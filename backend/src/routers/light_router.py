@@ -77,3 +77,64 @@ async def set_light_on():
     except IRTransmissionError as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
+# POST endpoints
+@router.post("/all-bright", response_model=LightResponse)
+async def post_light_all_bright():
+    """Set light to all bright mode (POST)"""
+    try:
+        result = light_service.set_light_mode(LightMode.ALL_BRIGHT)
+        return result
+    except LightResourceNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except IRTransmissionError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/bright", response_model=LightResponse)
+async def post_light_bright():
+    """Set light to bright mode (POST)"""
+    try:
+        result = light_service.set_light_mode(LightMode.BRIGHT)
+        return result
+    except LightResourceNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except IRTransmissionError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/dark", response_model=LightResponse)
+async def post_light_dark():
+    """Set light to dark mode (POST)"""
+    try:
+        result = light_service.set_light_mode(LightMode.DARK)
+        return result
+    except LightResourceNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except IRTransmissionError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/off", response_model=LightResponse)
+async def post_light_off():
+    """Turn light off (POST)"""
+    try:
+        result = light_service.set_light_mode(LightMode.OFF)
+        return result
+    except LightResourceNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except IRTransmissionError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/on", response_model=LightResponse)
+async def post_light_on():
+    """Turn light on (POST)"""
+    try:
+        result = light_service.set_light_mode(LightMode.ON)
+        return result
+    except LightResourceNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except IRTransmissionError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+

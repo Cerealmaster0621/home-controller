@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 from typing import Dict
 from models.light_model import LightMode
-from env import IR_CODE_DIR, IR_LIGHT_RESOURCES_PATH, TX_DEVICE
+from env import IR_CODE_DIR, IR_LIGHT_RESOURCES_PATH, TRANSMITTER_DEVICE
 
 
 class LightResourceNotFoundError(Exception):
@@ -25,15 +25,15 @@ class LightService:
     def __init__(self):
         self.ir_code_dir = IR_CODE_DIR
         self.resources_path = IR_LIGHT_RESOURCES_PATH
-        self.tx_device = TX_DEVICE
+        self.transmitter_device = TRANSMITTER_DEVICE
         
         # Validate environment variables
         if not self.resources_path:
             raise ValueError("IR_LIGHT_RESOURCES_PATH environment variable is not set")
         if not self.ir_code_dir:
             raise ValueError("IR_CODE_DIR environment variable is not set")
-        if not self.tx_device:
-            raise ValueError("TX_DEVICE environment variable is not set")
+        if not self.transmitter_device:
+            raise ValueError("transmitter_device environment variable is not set")
     
     def _get_resource_file_path(self, mode: LightMode) -> Path:
         """Get the full path to the light resource file"""
@@ -48,41 +48,37 @@ class LightService:
     def _transmit_ir_signal(self, resource_file: Path) -> None:
         """Transmit IR signal using the resource file"""
         try:
-            # Read the IR code from the resource file
-            with open(resource_file, 'r') as f:
-                ir_code = f.read().strip()
-            
-            if not ir_code:
+            # Validate that the resource file exists
+            if not resource_file.exists():
                 raise IRTransmissionError(
                     resource_file.stem,
-                    "IR code file is empty"
+                    "IR code file not found"
                 )
             
-            # Execute IR transmission command
-            # Adjust this command based on your actual IR transmission setup
+            # ir-ctl command: -d for device, --send for file transmission
             cmd = [
-                os.path.join(self.ir_code_dir, "ir_send"),  # or your actual IR command
-                "-d", self.tx_device,
-                ir_code
+                "ir-ctl",
+                "-d", self.transmitter_device,
+                "--send", str(resource_file)
             ]
             
             result = subprocess.run(
                 cmd,
                 capture_output=True,
                 text=True,
-                timeout=10
+                timeout=10,
+                check=True
             )
-            
-            if result.returncode != 0:
-                raise IRTransmissionError(
-                    resource_file.stem,
-                    f"Command failed with code {result.returncode}: {result.stderr}"
-                )
                 
         except subprocess.TimeoutExpired:
             raise IRTransmissionError(
                 resource_file.stem,
                 "IR transmission timed out"
+            )
+        except subprocess.CalledProcessError as e:
+            raise IRTransmissionError(
+                resource_file.stem,
+                f"Command failed with code {e.returncode}: {e.stderr}"
             )
         except FileNotFoundError as e:
             raise IRTransmissionError(
