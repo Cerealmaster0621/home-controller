@@ -59,6 +59,7 @@ class LightService:
             cmd = [
                 "ir-ctl",
                 "-d", self.transmitter_device,
+                "--carrier", "38000",
                 "--send", str(resource_file)
             ]
             
