@@ -1,0 +1,7 @@
+# Python bytecode and test artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Backend environment
+.env
