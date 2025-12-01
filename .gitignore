@@ -1,7 +1,11 @@
 resources/light/
 resources/ac/
+# Common Environment and General System Files
+.DS_Store
+*.tmp
+*.env
 
-/backend/src/.env
+# Python bytecode (for all python environments, but may be duplicated in backend/.gitignore)
 __pycache__/
 *.py[cod]
 *$py.class
