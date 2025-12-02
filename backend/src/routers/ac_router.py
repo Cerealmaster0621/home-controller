@@ -17,7 +17,6 @@ router = APIRouter(prefix="/ac", tags=["ac"])
 # Initialize the AC service
 ac_service = ACService()
 
-
 @router.get("/status", response_model=ACStatusResponse)
 async def get_ac_status():
     """Get AC status and available controls"""

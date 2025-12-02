@@ -44,3 +44,7 @@ fastlane/screenshots
 
 # Package.resolved
 Package.resolved
+
+# Custom - Secrets
+HomeController/Secrets.swift
+HomeController/Info.plist

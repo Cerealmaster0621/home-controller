@@ -9,3 +9,7 @@ resources/ac/
 __pycache__/
 *.py[cod]
 *$py.class
+
+# iOS Secrets - DO NOT COMMIT
+HomeController/HomeController/Secrets.swift
+HomeController/HomeController/Info.plist
